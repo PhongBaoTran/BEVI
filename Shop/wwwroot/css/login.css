@@ -1,0 +1,29 @@
+﻿
+.card-login {
+    width: 40% !important;
+    left: 30% !important;
+    top: 50px;
+    margin-bottom: 50px;
+    text-align: center;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+.card-login span {
+    font: 600;
+    color: black;
+    font-size: x-large;
+}
+
+.card-login table {
+    width: 60% !important;
+    margin: 0 auto;
+}
+
+.card-login table tr {
+    height: 50px;
+}
+
+    .card-login table tr td:nth-child(2){
+        text-align: center;
+    }

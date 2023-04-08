@@ -1,0 +1,9 @@
+﻿
+@if (!User.Identity.IsAuthenticated)
+{
+    <a href="@Url.Action("Login","Auth")" class="nav-item nav-link">Đăng nhập</a>
+}
+else
+{
+    <a href="" class="nav-item nav-link">Đăng xuất</a>
+}

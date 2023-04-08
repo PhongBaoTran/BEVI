@@ -1,0 +1,14 @@
+﻿
+.product-price{
+    color: red;
+}
+
+.product-name {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-left: 5px;
+    margin-right: 5px;
+}

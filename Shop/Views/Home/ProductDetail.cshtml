@@ -1,0 +1,59 @@
+﻿@model ProductModel
+@{
+    ViewData["Title"] = "ProductDetail";
+    Layout = "~/Views/Shared/_SecondLayout.cshtml";
+}
+
+<!-- Shop Detail Start -->
+<div class="container-fluid py-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-5 pb-5">
+            <div id="product-carousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner border product-imgs">
+                    <div class="carousel-item active">
+                        <img class="w-100 h-100" src="@Model.img[0]" alt="Image">
+                    </div>
+                    @for (int i = 1; i < Model.img.Count; i++)
+                    {
+                        <div class="carousel-item">
+                            <img class="w-100 h-100" src="@Model.img[i]" alt="Image">
+                        </div>
+                    }
+                </div>
+                <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
+                    <i class="fa fa-2x fa-angle-left text-dark"></i>
+                </a>
+                <a class="carousel-control-next" href="#product-carousel" data-slide="next">
+                    <i class="fa fa-2x fa-angle-right text-dark"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-7 pb-5">
+            <h3 class="font-weight-semi-bold">@Model.name</h3>
+            <div style="display: flex">
+                <h3 class="product-price">@string.Format("{0:#,##0}", Model.price)</h3>
+                <h3 class="text-muted ml-2"><del>@string.Format("{0:#,##0}", Model.lastprice)</del></h3>
+            </div>
+            <div class="d-flex align-items-center mb-4 pt-2">
+                <div class="input-group quantity mr-3" style="width: 130px;">
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary btn-minus">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <input type="text" class="form-control bg-secondary text-center" value="1">
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary btn-plus">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <button class="btn btn-primary px-3" onclick="DisplayAdded()"><i class="fa fa-shopping-cart mr-1"></i> Thêm vào giỏ</button>
+            </div>
+            <p class="mb-4">@Model.description</p>
+        </div>
+    </div>
+</div>
+<!-- Shop Detail End -->
+<link href="~/css/products.css" rel="stylesheet" />
