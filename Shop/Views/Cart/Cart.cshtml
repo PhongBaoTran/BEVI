@@ -1,0 +1,75 @@
+﻿@model CartModel
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_SecondLayout.cshtml";
+}
+
+<!-- Cart Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-8">
+            <p style="float: left; font: 900 !important; font-size: 3vmax; color: black">GIỎ HÀNG CỦA TÔI</p>
+        </div>
+    </div>
+    <div class="row px-xl-5">
+        <div class="col-lg-8 table-responsive mb-5">
+            <table class="table table-bordered text-center mb-0">
+                <thead class="bg-secondary text-dark">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Tổng</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    @{ decimal allsum = 0; }
+                    @foreach(var item in Model.items)
+            {
+                        <tr>
+                        <td class="align-middle"><img src="@item.img[0]" alt="" style="width: 50px;"> @item.name</td>
+                        <td class="align-middle">@item.price</td>
+                        <td class="align-middle">
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="@item.quantity">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            @{ var sum = item.price * item.quantity;
+                               allsum += sum;
+                                }
+                            @sum
+                        </td>
+                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Tổng giá</h4>
+                </div>
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">@allsum</h5>
+                    </div>
+                    <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cart End -->

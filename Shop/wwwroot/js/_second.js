@@ -2,6 +2,7 @@
 // document ready
 $(document).ready(function () {
     getcategorieslistname();
+    getCartCount();
 });
 
 // lay danh sach loai
@@ -26,4 +27,38 @@ function DisplayAdded() {
     setTimeout(function () {
         $('#added-to-cart').hide();
     }, 2000);
+}
+
+// Dang nhap
+function Login() {
+    var name = $('#login_name').val()
+    var password = $('#login_password').val()
+    $.ajax({
+        url: '/Auth/TaskLogin',
+        type: 'post',
+        async: true,
+        data: {
+            name: name,
+            password: password
+        },
+        success: function (data) {
+            if (data == true) {
+                window.location.href = '/';
+            }
+            else {
+                $('#login_error').show();
+            }
+        }
+    })
+}
+
+// lay so luong trong gio hang
+function getCartCount() {
+    $.ajax({
+        url: '/Cart/GetCartCount',
+        type: 'get',
+        success: function (data) {
+            $('#cart_count').text(data);
+        }
+    })
 }

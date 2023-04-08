@@ -424,3 +424,4 @@ E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Auth\Login.csh
 E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Shared\_SecondLayout.cshtml.g.cs
 E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Home\ProductDetail.cshtml.g.cs
 E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Auth\_AuthPartial.cshtml.g.cs
+E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Cart\Cart.cshtml.g.cs

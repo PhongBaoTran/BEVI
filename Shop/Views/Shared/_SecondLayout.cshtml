@@ -21,11 +21,12 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="~/Template/css/style.css" rel="stylesheet">
 
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/js/_second.js"></script>
 </head>
 
 <body>
+    <noscript>
+        <h2>Javascript is disabled</h2>
+    </noscript>
     <!-- Topbar Start -->
     <div class="container-fluid">
         <div class="row align-items-center py-3 px-xl-5">
@@ -47,9 +48,9 @@
                 </form>
             </div>
             <div class="col-lg-3 col-6 text-right">
-                <a href="" class="btn border">
+                <a href="@Url.Action("Cart","Cart")" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge" id="cart_count"></span>
                 </a>
             </div>
         </div>
@@ -96,8 +97,8 @@
     @RenderBody()
 
     <!-- Footer Start -->
-    <div style="height: 10px;"></div>
-    <div class="container-fluid bg-secondary text-dark mt-5 pt-5" style="padding-top: 20px !important">
+    <div style="height: 50px;"></div>
+    <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
         <div class="row border-top border-light mx-xl-5 py-4">
             <div class="col-md-6 px-xl-0">
                 <p class="mb-md-0 text-center text-md-left text-dark">
@@ -122,6 +123,7 @@
 
 
     <!-- JavaScript Libraries -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="~/Template/lib/easing/easing.min.js"></script>
@@ -133,6 +135,8 @@
 
     <!-- Template Javascript -->
     <script src="~/Template/js/main.js"></script>
+    
+    <script src="/js/_second.js"></script>
 </body>
 
 </html>

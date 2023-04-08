@@ -15,5 +15,6 @@ namespace Shop.Models
 
         public List<string> img = new List<string>();
         public int categoryid { get; set; }
+        public int quantity { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model UserModel 
+﻿
 @{
     Layout = "~/Views/Shared/_SecondLayout.cshtml";
 }
@@ -6,31 +6,20 @@
 <!-- Page Header Start -->
 <div class="container-fluid mb-5">
     <div class="card card-login">
-        <span>Đăng nhập</span>
-        <table>
-            <tr>
-                <td>
-                    <label>Tài khoản</label>
-                </td>
-                <td>
-                    <input type="text" asp-for="name" class="form-control" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Mật khẩu</label>
-                </td>
-                <td>
-                    <input type="password" asp-for="password" class="form-control"/>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <button class="btn btn-primary">Đăng nhập</button>
-                </td>
-            </tr>
-        </table>
+        <div class="card-row">
+            <label>Tài khoản:</label>
+            <input id="login_name" type="text" class="form-control"/>
+        </div>
+        <div class="card-row">
+            <label>Mật khẩu:</label>
+            <input id="login_password" type="password" class="form-control"/>
+        </div>
+        <div>
+            <label class="login-error" id="login_error" style="display: none; margin-top: -5px">*Sai tài khoản hoặc mật khẩu</label>
+        </div>
+        <div class="card-row">
+            <button class="btn btn-primary" onclick="Login()">Đăng nhập</button>
+        </div>
     </div>
 </div>
 <!-- Page Header End -->

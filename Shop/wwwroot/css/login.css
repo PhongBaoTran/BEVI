@@ -7,23 +7,41 @@
     text-align: center;
     padding-bottom: 20px;
     padding-top: 20px;
+    border-radius: 10px;
 }
 
-.card-login span {
-    font: 600;
+.card-login label {
+    float: left;
+    margin-left: 15px;
+    margin-top: 5px;
     color: black;
-    font-size: x-large;
 }
 
-.card-login table {
-    width: 60% !important;
-    margin: 0 auto;
-}
-
-.card-login table tr {
-    height: 50px;
-}
-
-    .card-login table tr td:nth-child(2){
-        text-align: center;
+    .card-login input {
+        float: right;
+        margin-right: 15px;
+        width: 60%;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
     }
+
+        .card-login input:focus {
+            border: 1px solid rgba(0, 0, 0, 1);
+        }
+
+.card-row {
+    margin-bottom: 10px;
+}
+
+.card-row button {
+    float: right;
+    margin-right: 15px;
+    border-radius: 10px;
+}
+
+.card-login .login-error {
+    color: red;
+    font-size: 13px;
+    float: right;
+    margin-right: 15px;
+}
