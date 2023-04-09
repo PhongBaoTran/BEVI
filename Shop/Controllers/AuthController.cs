@@ -39,6 +39,8 @@ namespace Shop.Controllers
                 var claims = new[] {
                     new Claim(ClaimTypes.Name, user.fullname),
                     new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
+                    new Claim(ClaimTypes.StreetAddress, user.address.ToString()),
+                    new Claim(ClaimTypes.MobilePhone, user.phone.ToString()),
                     new Claim(ClaimTypes.Role, user.role)};
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(

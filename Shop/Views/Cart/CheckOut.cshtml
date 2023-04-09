@@ -1,0 +1,93 @@
+﻿@model OrderModel
+
+@{
+    ViewData["Title"] = "CheckOut";
+    Layout = "~/Views/Shared/_SecondLayout.cshtml";
+}
+
+<!-- Checkout Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-6">
+            <div class="mb-4">
+                <h4 class="font-weight-semi-bold mb-4">THANH TOÁN</h4>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label class="text-primary" style="text-decoration: underline">Tên người nhận</label>
+                        <label style="float: right; margin-right: 30%">@Model.user.fullname</label>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label class="text-primary" style="text-decoration: underline">Số điện thoại</label>
+                        <label style="float: right; margin-right: 30%">
+                            @Model.user.phone
+                        </label>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label class="text-primary" style="text-decoration: underline">Địa chỉ giao hàng</label>
+                        <label style="float: right; margin-right: 30%; text-align: justify">
+                            @Model.user.address
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">HÓA ĐƠN </h4>
+                </div>
+
+
+                <div class="card-body">
+                    <div style="overflow: auto;">
+                        <table class="table table-bordered border-primary text-center mb-0" style="font-size: 13px;">
+                            <thead class="bg-secondary text-dark">
+                                <tr>
+                                    <th colspan="2">Sản phẩm</th>
+                                    <th>Đơn giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody class="align-middle">
+                                @foreach (var item in Model.cart.items)
+                                {
+                                    var sum = item.price * item.quantity;
+                                    <tr>
+                                        <td class="align-middle"><img src="@item.img[0]" alt="" style="width: 40px; height: 40px;"> </td>
+                                        <td class="align-middle" style="overflow: hidden">@item.name</td>
+                                        <td class="align-middle">@string.Format("{0:#,##0}", item.price)</td>
+                                        <td class="align-middle">
+                                            <div class="mx-auto align-middle">
+                                                @item.quantity
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">@string.Format("{0:#,##0}", sum)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <hr class="mt-0">
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Số tiền phải trả cho hóa đơn</h5>
+                            @{
+                                decimal sumall = 0;
+                                foreach (var i in Model.cart.items)
+                                {
+                                    sumall += i.price * i.quantity;
+                                }
+                            }
+                            <h5 class="font-weight-bold">@string.Format("{0:#,##0}", sumall)</h5>
+                        </div>
+                    </div>
+                    <hr style="border-top: 5px solid black">
+                    <button class="btn btn-primary" style="float: right" onclick="XacNhan()">Xác nhận thanh toán</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Checkout End -->
