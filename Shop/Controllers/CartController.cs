@@ -253,7 +253,6 @@ namespace Shop.Controllers
             return user;
         }
 
-
         public async Task<IActionResult> TaskCheckOut()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);

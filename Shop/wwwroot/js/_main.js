@@ -57,3 +57,8 @@ function DisplayAdded() {
         $('#added-to-cart').hide();
     }, 2000);
 }
+
+function Search() {
+    var str = $('#txt_search').val();
+    location.href = "/Home/Search?str=" + str;
+}

@@ -28,7 +28,7 @@ namespace Shop.Controllers
         {
             MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
             await db.OpenAsync();
-            var query = "select * from products limit 20";
+            var query = "select * from products";
             using var command = new MySqlCommand(query, db);
             using var r = await command.ExecuteReaderAsync();
 
@@ -105,6 +105,40 @@ namespace Shop.Controllers
             }
             await db.CloseAsync();
             return list;
+        }
+
+        public async Task<IActionResult> Search(string str)
+        {
+            str = str == null ? "" : str.ToLower();
+            MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
+            await db.OpenAsync();
+            var query = "select * from products " +
+                "where name like '%" + str + "%' or description like '%" + str + "%'";
+            using var command = new MySqlCommand(query, db);
+            using var r = await command.ExecuteReaderAsync();
+
+            List<ProductModel> list = new List<ProductModel>();
+            while (await r.ReadAsync())
+            {
+                ProductModel p = new ProductModel()
+                {
+                    id = r.GetInt32(0),
+                    name = r.GetString(1),
+                    description = r.GetString(2),
+                    price = r.GetDecimal(3),
+                    lastprice = r.GetDecimal(4),
+                    categoryid = r.GetInt32(5),
+                };
+                p.img.Add(await GetProductImg(p.id));
+                list.Add(p);
+            };
+            await db.CloseAsync();
+            return View(list);
+        }
+
+        public IActionResult Info()
+        {
+            return View();
         }
     }
 }

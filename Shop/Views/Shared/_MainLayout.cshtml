@@ -39,9 +39,10 @@
             <div class="col-lg-6 col-6 text-left">
                 <form action="">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm" id="txt_search">
                         <div class="input-group-append">
-                            <span class="input-group-text bg-primary search-button">
+                            <span class="input-group-text bg-primary search-button" 
+                                  onclick="Search()">
                                 <i class="fa fa-search text-primary"></i>
                             </span>
                         </div>
@@ -81,8 +82,8 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="detail.html" class="nav-item nav-link">Thông tin shop</a>
+                            <a href="/Home/Index" class="nav-item nav-link active">Trang chủ</a>
+                            <a href="/Home/Info" class="nav-item nav-link">Thông tin shop</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             @await Html.PartialAsync("../Auth/_AuthPartial.cshtml")
