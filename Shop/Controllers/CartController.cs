@@ -25,9 +25,16 @@ namespace Shop.Controllers
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            CartModel cart = await GetCart(id);
+
+            return View(cart);
+        }
+
+        public async Task<CartModel> GetCart(string userid)
+        {
             MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
             await db.OpenAsync();
-            var query = "select * from carts where userid = " + id;
+            var query = "select * from carts where userid = " + userid;
             using var command = new MySqlCommand(query, db);
             using var r = await command.ExecuteReaderAsync();
 
@@ -35,18 +42,48 @@ namespace Shop.Controllers
             while (await r.ReadAsync())
             {
                 ProductModel p = new ProductModel();
-                p.id = r.GetInt32(0);
-                p.name = r.GetString(1);
-                p.description = r.GetString(2);
-                p.price = r.GetDecimal(3);
-                p.lastprice = r.GetDecimal(4);
-                p.categoryid = r.GetInt32(5);
-                p.quantity = await GetProductQuantity(p.id);
+                p = await GetProductDetail(r.GetInt32(1));
+                p.quantity = r.GetInt32(2);
                 cart.items.Add(p);
             }
 
             await db.CloseAsync();
-            return View(cart);
+            return cart;
+        }
+
+        public async Task<ProductModel> GetProductDetail(int id)
+        {
+            MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
+            await db.OpenAsync();
+            var query = "select * from products where productid = " + id;
+            using var command = new MySqlCommand(query, db);
+            using var r = await command.ExecuteReaderAsync();
+
+            ProductModel P = new ProductModel();
+            while (await r.ReadAsync())
+            {
+                P.id = r.GetInt32(0);
+                P.name = r.GetString(1);
+                P.price = r.GetDecimal(3);
+                P.img.Add(await GetProductImg(P.id));
+            }
+            await db.CloseAsync();
+
+            return P;
+        } 
+
+        public async Task<string> GetProductImg(int id)
+        {
+            MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
+            await db.OpenAsync();
+            var query = "select url from productimages where productid = " + id + " limit 1";
+            using var command = new MySqlCommand(query, db);
+            using var r = await command.ExecuteReaderAsync();
+
+            string img = "";
+            while (await r.ReadAsync()) img = r.GetString(0);
+            await db.CloseAsync();
+            return img;
         }
 
         [Authorize]
@@ -101,11 +138,11 @@ namespace Shop.Controllers
 
             if (await CheckProductExisted(productid))
             {
-                UpdateCart(productid, count + current);
+                await UpdateCart(productid, count + current);
             }
             else
             {
-                CreateCart(productid, count);
+                await CreateCart(productid, count);
             }
 
             return Json(true);
@@ -132,7 +169,7 @@ namespace Shop.Controllers
             return existed;
         }
 
-        public async void UpdateCart(string productid, int quantity)
+        public async Task UpdateCart(string productid, int quantity)
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
@@ -147,7 +184,7 @@ namespace Shop.Controllers
             await db.CloseAsync();
         }
 
-        public async void CreateCart(string productid, int quantity)
+        public async Task CreateCart(string productid, int quantity)
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
@@ -156,6 +193,85 @@ namespace Shop.Controllers
             var query2 = "insert into carts values (" + id + "," + productid + "," + quantity + ")";
             using var cmd2 = new MySqlCommand(query2, db);
             await cmd2.ExecuteNonQueryAsync();
+
+            await db.CloseAsync();
+        }
+
+        public async Task<IActionResult> RemoveFromCart(string productid, string quantity)
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int c = int.Parse(quantity);
+
+            MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
+            await db.OpenAsync();
+
+            var query = (c == 0) ? 
+                "delete from carts where userid = " + id + " and productid = " + productid :
+                "update carts set quantity = " + (await GetProductQuantity(int.Parse(productid)) - 1) 
+                    + " where userid= " + id + " and productid = " + productid;
+            using var command = new MySqlCommand(query, db);
+            await command.ExecuteNonQueryAsync();
+
+            await db.CloseAsync();
+            return Json(true);
+        }
+
+        public async Task<IActionResult> CheckOut()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int orderid = await CreateOrder(id);
+
+            CartModel cart = await GetCart(id);
+            foreach(var item in cart.items)
+            {
+                await InsertProductToOrder(item.id, item.quantity, item.price, orderid);
+            }
+
+
+        }
+
+        public async Task<int> CreateOrder(string userid)
+        {
+            MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
+            await db.OpenAsync();
+
+            var date = DateTime.Now;
+            var query = "insert into orders(userid, createdat, updatedat, status, shippingcost, tax, discount) "
+                + "values (@userid, @createdat, @updatedat, @status, @shippingcost, @tax, @discount)";
+            using var command = new MySqlCommand(query, db);
+            command.Parameters.AddWithValue("@userid", userid);
+            command.Parameters.AddWithValue("@createdat", date);
+            command.Parameters.AddWithValue("@updatedat", date);
+            command.Parameters.AddWithValue("@status", 1);
+            command.Parameters.AddWithValue("@shippingcost", 0);
+            command.Parameters.AddWithValue("@tax", 0);
+            command.Parameters.AddWithValue("@discount", 0);
+            await command.ExecuteNonQueryAsync();
+
+            query = "select orderid from orders where userid = " + userid + " and createdat = '" + date + "'";
+            using var orderid = new MySqlCommand(query, db);
+            using var r = await orderid.ExecuteReaderAsync();
+
+            int order = 0;
+            while(await r.ReadAsync())
+            {
+                order = r.GetInt32(0);
+            }
+
+            await db.CloseAsync();
+
+            return order;
+        }
+
+        public async Task InsertProductToOrder(int itemid,int quantity, decimal price, int orderid)
+        {
+            MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
+            await db.OpenAsync();
+
+            var query = 
+                "insert to orderitems values (" + orderid + "," + itemid + "," + quantity + "," + price + ")";
+            using var command = new MySqlCommand(query, db);
+            await command.ExecuteNonQueryAsync();
 
             await db.CloseAsync();
         }

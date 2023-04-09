@@ -26,6 +26,7 @@ function getCartCount() {
     $.ajax({
         url: '/Cart/GetCartCount',
         type: 'get',
+        async: true,
         success: function (data) {
             $('#cart_count').text(data);
         }
@@ -43,8 +44,8 @@ function Add1toCart(id) {
             quantity: 1
         },
         success: function () {
-            DisplayAdded();
             getCartCount();
+            DisplayAdded();
         }
     })
 }

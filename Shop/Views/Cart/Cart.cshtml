@@ -13,7 +13,7 @@
     </div>
     <div class="row px-xl-5">
         <div class="col-lg-8 table-responsive mb-5">
-            <table class="table table-bordered text-center mb-0">
+            <table class="table table-bordered text-center mb-0" id="table_cart">
                 <thead class="bg-secondary text-dark">
                     <tr>
                         <th>Sản phẩm</th>
@@ -25,35 +25,39 @@
                 </thead>
                 <tbody class="align-middle">
                     @{ decimal allsum = 0; }
-                    @foreach(var item in Model.items)
-            {
-                        <tr>
-                        <td class="align-middle"><img src="@item.img[0]" alt="" style="width: 50px;"> @item.name</td>
-                        <td class="align-middle">@item.price</td>
-                        <td class="align-middle">
-                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-minus">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
+                    @foreach (var item in Model.items)
+                    {
+                        var priceid = "price" + item.id;
+                        var quantityid = "quantity" + item.id;
+                        var sumid = "sum" + item.id;
+                        var rowid = "row" + item.id;
+                        <tr id="@rowid">
+                            <td class="align-middle"><img src="@item.img[0]" alt="" style="width: 50px;"> @item.name</td>
+                            <td class="align-middle" id="@priceid">@string.Format("{0:#,##0}", item.price)</td>
+                            <td class="align-middle">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-minus" onclick="Remove1(@item.id)">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" id="@quantityid" class="form-control form-control-sm bg-secondary text-center" value="@item.quantity">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-plus" onclick="Add1(@item.id)">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="@item.quantity">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-primary btn-plus">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="align-middle">
-                            @{ var sum = item.price * item.quantity;
-                               allsum += sum;
+                            </td>
+                            <td class="align-middle" id="@sumid">
+                                @{ var sum = item.price * item.quantity;
+                                    allsum += sum;
                                 }
-                            @sum
-                        </td>
-                        <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                    </tr>
-            }
+                                @string.Format("{0:#,##0}", sum)
+                            </td>
+                            <td class="align-middle"><button class="btn btn-sm btn-primary" onclick="DeleteCart(@item.id)"><i class="fa fa-times"></i></button></td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
@@ -64,12 +68,97 @@
                 </div>
                 <div class="card-footer border-secondary bg-transparent">
                     <div class="d-flex justify-content-between mt-2">
-                        <h5 class="font-weight-bold">@allsum</h5>
+                        <h5 class="font-weight-bold" id="allsum">@string.Format("{0:#,##0}", allsum)</h5>
                     </div>
-                    <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+                    @if(Model.items.Count > 0)
+            {
+                <button id="btnCheckOut" onclick="location.href = '@Url.Action("CheckOut","Cart")'" class="btn btn-block btn-primary my-3 py-3">Thanh toán</button>
+            }
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- Cart End -->
+
+<script>
+    function Remove1(id) {
+        var c = $('#quantity' + id).val()
+        if (c > 1) {
+            $.ajax({
+                url: '/Cart/RemoveFromCart',
+                type: 'post',
+                async: true,
+                data: {
+                    productid: id,
+                    quantity: 1
+                },
+                success: function () {
+                    UpdatePrice(id);
+                    getCartCount();
+                }
+            })
+        }
+    }
+
+    function Add1(id) {
+        $.ajax({
+        url: '/Cart/AddToCart',
+        type: 'post',
+        async: true,
+        data: {
+            productid: id,
+            quantity: 1
+        },
+        success: function () {
+            UpdatePrice(id);
+        }
+    })
+    }
+
+    function UpdatePrice(id) {
+        var price = parseInt($('#price' + id).text().replaceAll(',',''));
+        var quatity = parseInt($('#quantity' + id).val());
+        var sum = price * quatity + "";
+        $('#sum' + id).text(sum.replace(/(\d)(?=(\d{3})+$)/g, '$1,'));
+
+        UpdateAllSum();
+    }
+
+    function UpdateAllSum() {
+        var table = document.getElementById('table_cart')
+        var tablerow = table.rows
+
+        var sum = 0;
+        for (i = 1; i < tablerow.length; i++ ) {
+            sum += parseInt(tablerow[i].cells[3].innerText.replaceAll(',',''))
+        }
+        
+        $('#allsum').text(("" + sum).replace(/(\d)(?=(\d{3})+$)/g, '$1,'));
+
+        sum == 0 ? $('#btnCheckOut').hide() : $('#btnCheckOut').show()
+    }
+
+    function DeleteCart(id) {
+        $.ajax({
+                url: '/Cart/RemoveFromCart',
+                type: 'post',
+                async: true,
+                data: {
+                    productid: id,
+                    quantity: 0
+                },
+                success: function () {
+                    DeleteTableRow(id);
+                }
+            })
+    }
+
+    function DeleteTableRow(id) {
+        $('#row' + id).remove()
+        UpdateAllSum()
+        getCartCount()
+    }
+
+    
+</script>
