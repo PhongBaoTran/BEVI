@@ -63,3 +63,18 @@ function getCartCount() {
     })
 }
 
+function AddToCart(id) {
+    var qua = $('#txt_addmanytocart').val();
+    $.ajax({
+        url: '/Cart/AddToCart',
+        type: 'post',
+        async: true,
+        data: {
+            productid: id,
+            quantity: qua
+        },
+        success: function () {
+            DisplayAdded();
+        }
+    })
+}

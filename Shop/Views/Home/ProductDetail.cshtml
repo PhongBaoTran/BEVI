@@ -42,14 +42,14 @@
                             <i class="fa fa-minus"></i>
                         </button>
                     </div>
-                    <input type="text" class="form-control bg-secondary text-center" value="1">
+                    <input id="txt_addmanytocart" type="text" class="form-control bg-secondary text-center" value="1">
                     <div class="input-group-btn">
                         <button class="btn btn-primary btn-plus">
                             <i class="fa fa-plus"></i>
                         </button>
                     </div>
                 </div>
-                <button class="btn btn-primary px-3" onclick="DisplayAdded()"><i class="fa fa-shopping-cart mr-1"></i> Thêm vào giỏ</button>
+                <button class="btn btn-primary px-3" onclick="AddToCart(@Model.id)"><i class="fa fa-shopping-cart mr-1"></i> Thêm vào giỏ</button>
             </div>
             <p class="mb-4">@Model.description</p>
         </div>

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "TaskCheckOut";
+    Layout = "~/Views/Shared/_SecondLayout.cshtml";
+}
+
+<div class="container-fluid mb-5">
+    <div class="card card-login">
+        <div class="card-row">
+            <h2>Thanh toán đơn hàng thành công</h2>
+        </div>
+        <div class="card-row">
+            <button class="btn btn-primary" onclick="location.href = '@Url.Action("Index","Home")'">Trở lại trang chủ</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-login {
+        width: 60%;
+        margin: 0 auto;
+        top: 20px;
+        text-align: center;
+        padding-bottom: 20px;
+    }
+
+</style>

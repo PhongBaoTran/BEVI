@@ -70,7 +70,7 @@ namespace Shop.Controllers
             await db.CloseAsync();
 
             return P;
-        } 
+        }
 
         [Authorize]
         public async Task<string> GetProductImg(int id)
@@ -135,7 +135,7 @@ namespace Shop.Controllers
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             int count = int.Parse(quantity);
-            int current = await GetProductQuantity(count);
+            int current = await GetProductQuantity(int.Parse(productid));
 
             if (await CheckProductExisted(productid))
             {
@@ -206,9 +206,9 @@ namespace Shop.Controllers
             MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
             await db.OpenAsync();
 
-            var query = (c == 0) ? 
+            var query = (c == 0) ?
                 "delete from carts where userid = " + id + " and productid = " + productid :
-                "update carts set quantity = " + (await GetProductQuantity(int.Parse(productid)) - 1) 
+                "update carts set quantity = " + (await GetProductQuantity(int.Parse(productid)) - 1)
                     + " where userid= " + id + " and productid = " + productid;
             using var command = new MySqlCommand(query, db);
             await command.ExecuteNonQueryAsync();
@@ -254,23 +254,27 @@ namespace Shop.Controllers
         }
 
 
-        public async Task TaskCheckOut()
+        public async Task<IActionResult> TaskCheckOut()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var date = DateTime.Now;
+            var date = DateTime.Now.ToString("yyyy-MM-dd H:mm:ss");
             int orderid = await CreateOrder(id, date);
 
             CartModel cart = await GetCart(id);
-            foreach(var item in cart.items)
+            foreach (var item in cart.items)
             {
                 await InsertProductToOrder(item.id, item.quantity, item.price, orderid);
             }
 
             await CreateOrderHistory(orderid, int.Parse(id), date, "");
+
+            await DeleteCart();
+
+            return View();
         }
 
-        public async Task<int> CreateOrder(string userid, DateTime date)
+        public async Task<int> CreateOrder(string userid, string date)
         {
             MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
             await db.OpenAsync();
@@ -292,7 +296,7 @@ namespace Shop.Controllers
             using var r = await orderid.ExecuteReaderAsync();
 
             int order = 0;
-            while(await r.ReadAsync())
+            while (await r.ReadAsync())
             {
                 order = r.GetInt32(0);
             }
@@ -302,26 +306,38 @@ namespace Shop.Controllers
             return order;
         }
 
-        public async Task InsertProductToOrder(int itemid,int quantity, decimal price, int orderid)
+        public async Task InsertProductToOrder(int itemid, int quantity, decimal price, int orderid)
         {
             MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
             await db.OpenAsync();
 
-            var query = 
-                "insert to orderitems values (" + orderid + "," + itemid + "," + quantity + "," + price + ")";
+            var query =
+                "insert into orderitems(orderid, productid, quantity, price) " +
+                "values (" + orderid + "," + itemid + "," + quantity + "," + price + ")";
             using var command = new MySqlCommand(query, db);
             await command.ExecuteNonQueryAsync();
 
             await db.CloseAsync();
         }
 
-        public async Task CreateOrderHistory(int orderid, int userid, DateTime date, string note)
+        public async Task CreateOrderHistory(int orderid, int userid, string date, string note)
         {
             MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
             await db.OpenAsync();
             var query =
-                "insert to orderhistories(orderid, orderstatusid, userid, changedate, note) values " +
+                "insert into orderhistories(orderid, orderstatusid, userid, changedate, note) values " +
                 "(" + orderid + ",1," + userid + ",'" + date + "','" + note + "')";
+            using var command = new MySqlCommand(query, db);
+            await command.ExecuteNonQueryAsync();
+
+            await db.CloseAsync();
+        }
+
+        public async Task DeleteCart()
+        {
+            MySqlConnection db = new MySqlConnection(Configuration["ConnectionStrings:Default"]);
+            await db.OpenAsync();
+            var query = "delete from carts where userid = " + User.FindFirstValue(ClaimTypes.NameIdentifier);
             using var command = new MySqlCommand(query, db);
             await command.ExecuteNonQueryAsync();
 
