@@ -429,3 +429,5 @@ E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Cart\CheckOut.
 E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Cart\TaskCheckOut.cshtml.g.cs
 E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Home\Search.cshtml.g.cs
 E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Home\Info.cshtml.g.cs
+E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Home\Contact.cshtml.g.cs
+E:\Projects\Shop_NET_Razor\Shop\Shop\obj\Debug\net5.0\Razor\Views\Home\News.cshtml.g.cs

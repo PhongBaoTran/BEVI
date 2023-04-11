@@ -83,7 +83,9 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="/Home/Index" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="/Home/Info" class="nav-item nav-link">Thông tin shop</a>
+                            <a href="/Home/Info" class="nav-item nav-link">Giới thiệu</a>
+                            <a href="/Home/News" class="nav-item nav-link">Tin tức</a>
+                            <a href="/Home/Contact" class="nav-item nav-link">Liên hệ</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             @await Html.PartialAsync("../Auth/_AuthPartial.cshtml")
@@ -92,6 +94,7 @@
                 </nav>
                 <div id="header-carousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
+                        <!--Them slide-->
                         <div class="carousel-item active" style="height: 410px;">
                             <img class="img-fluid" src="/Template/img/anhbia1.png" alt="Image">
                             <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
@@ -100,6 +103,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!--Them slide-->
                         <div class="carousel-item" style="height: 410px;">
                             <img class="img-fluid" src="/Template/img/anhbia2.png" alt="Image">
                             <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
@@ -134,17 +138,41 @@
     <!-- Modal End -->
 
     <!-- Footer Start -->
-    <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
-        <div class="row border-top border-light mx-xl-5 py-4">
-            <div class="col-md-6 px-xl-0">
-                <p class="mb-md-0 text-center text-md-left text-dark">
-                    &copy; <a class="text-dark font-weight-semi-bold" href="#">BEVI</a>. All Rights Reserved. Designed
-                    by
-                    <a class="text-dark font-weight-semi-bold" href="https://htmlcodex.com">HTML Codex</a><br>
-                    Distributed By <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                </p>
+    <div class="container-fluid bg-secondary text-dark afooter" style="padding-top: 10px;">
+        
+    <hr style="border: 2px solid black;"/>
+            <div class="col-md-12" style="text-align: center;">
+                <h4>THÔNG TIN LIÊN HỆ</h4>
+                <h4>CÔNG TY TNHH VÀ KINH DOANH TM BẾP VIỆT</h4>
             </div>
-        </div>
+        <table class="table-borderless">
+            <tr>
+                <td>
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    1900393979
+                </td>
+                <td>
+                    <img src="/Template/fb.png" onclick="location.href = 'https://www.facebook.com/profile.php?id=100077584733651'"/>
+                    Bếp Việt
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    bepviet2015@gmail.com
+                </td>
+                <td>
+                    <img src="/Template/ins.png" />
+                    Bepviet.bevi
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    614 Ngõ 147 Tân Mai, phường Tân Mai, quận Hoàng Mai, Thành Phố Hà Nội
+                </td>
+            </tr>
+        </table>
     </div>
     <!-- Footer End -->
     <!-- Back to Top -->

@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/_SecondLayout.cshtml";
+}
+
+<div class="container-fluid mb-5">
+    <div class="card card-login">
+        <div class="card-row">
+            <h2>Liên hệ với chúng tôi</h2>
+        </div>
+        <div class="card-row">
+            <table class="table-borderless">
+                <tr><td>Họ và tên</td></tr>
+                <tr><td><input type="text" class="form-control ainput" /></td></tr>
+                <tr><td>Email</td></tr>
+                <tr><td><input type="text" class="form-control ainput" /></td></tr>
+                <tr><td>Điện thoại</td></tr>
+                <tr><td><input type="number" class="form-control ainput" /></td></tr>
+                <tr><td>Tin nhắn</td></tr>
+                <tr><td><textarea style="width: 100%" class="form-control ainput"></textarea></td></tr>
+                <tr><td><button class="btn btn-primary" onclick="buttonclick()">Gửi tin nhắn</button></td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-login {
+        width: 50%;
+        margin: 0 auto;
+        top: 20px;
+        padding-bottom: 20px;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    .card-login input {
+        border: 1px solid rgba(0,0,0,0.5);
+        width: 100%;
+    }
+
+    .card-login textarea {
+        border: 1px solid rgba(0,0,0,0.5);
+    }
+
+    .card-login input:focus {
+        border: 1px solid rgba(0,0,0,1);
+    }
+
+    .card-login textarea:focus {
+        border: 1px solid rgba(0,0,0,1);
+    }
+
+    button {
+        margin-top: 10px;
+    }
+</style>
+
+<script>
+    function buttonclick() {
+        var a = document.getElementsByClassName('ainput')
+            for (var i in a) {
+                a[i].value = "";
+            }
+            alert("Gửi tin nhắn thành công")
+    }
+</script>
